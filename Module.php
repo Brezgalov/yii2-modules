@@ -33,7 +33,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
      * @param \yii\base\Application $app
      * @param array $names
      */
-    public function requireModules(Application $app, array $names)
+    public function requireModules(\yii\base\Application $app, array $names)
     {
         $idString = (@$this->id)? "модуля {$this->id} " : '';
         foreach ($names as $name) {
