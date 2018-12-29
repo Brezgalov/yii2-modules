@@ -1,6 +1,6 @@
 <?php
 
-namespace Yii2Modules;
+namespace brezgalov\modules;
 
 use yii\base\BootstrapInterface;
 
