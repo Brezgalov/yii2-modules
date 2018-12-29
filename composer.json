@@ -1,0 +1,13 @@
+{
+    "name": "brezgalov/yii2-modules",
+    "description": "yii2",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Oleg Brezgalov",
+            "email": "oleg.brezgalov@gmail.com"
+        }
+    ],
+    "require": {}
+}
