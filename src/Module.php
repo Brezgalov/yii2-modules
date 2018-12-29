@@ -12,6 +12,25 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public $requiredModules = [];
 
     /**
+     * @var string - базовое пространство имен. По умолчанию пытается получить текущее пространство имен класса
+     */
+    public $baseNamespace = '';
+
+    /**
+     * {@inheritdoc}
+     */
+    public function init()
+    {
+        parent::init();
+        if (empty($this->baseNamespace)) {
+            $class = get_class($this);
+            if (($pos = strrpos($class, '\\')) !== false) {
+                $this->baseNamespace = substr($class, 0, $pos);
+            }
+        }
+    }
+
+    /**
      * @param \yii\base\Application $app
      */
     public function bootstrap($app)
@@ -20,10 +39,10 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $this->requireModules($app, $this->requiredModules);
         // если приложение консольное - используем консольные контроллеры
         if ($app instanceof \yii\console\Application) {
-            $this->controllerNamespace = "app\modules\{$this->id}\commands";
+            $this->controllerNamespace = $this->baseNamespace . '\\commands';
         }
         //подключаем urlManager
-        $path = \Yii::getAlias("@app/modules/{$this->id}/config/urlManager.php");
+        $path = \Yii::getAlias('@' . str_replace('\\', '/', $this->baseNamespace) . '/config/urlManager.php');
         if (is_file($path)) {
             $app->getUrlManager()->addRules(require($path), false);
         }
