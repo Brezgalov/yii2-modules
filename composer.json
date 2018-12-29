@@ -9,5 +9,10 @@
             "email": "oleg.brezgalov@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "autoload": {
+        "psr-0": {
+            "Yii2Modules": "src/"
+        }
+    }
 }
