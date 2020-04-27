@@ -10,7 +10,7 @@ trait GetModuleDbTrait
      * @param string $dbComponentName
      * @return Connection|null
      */
-    public static function GetModuleDb($dbComponentName = 'dbConnection')
+    public static function getModuleDb($dbComponentName = 'dbConnection')
     {
         $module = \Yii::$app->controller->module;
 
