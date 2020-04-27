@@ -17,6 +17,17 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public $baseNamespace = '';
 
     /**
+     * @var string
+     */
+    public $urlManagerPath;
+
+    /**
+     * Имя компонента приложения который используется для подключения к бд
+     * @var string
+     */
+    public $dbConnection;
+
+    /**
      * {@inheritdoc}
      */
     public function init()
@@ -42,7 +53,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
             $this->controllerNamespace = $this->baseNamespace . '\\commands';
         }
         //подключаем urlManager
-        $path = \Yii::getAlias('@' . str_replace('\\', '/', $this->baseNamespace) . '/config/urlManager.php');
+        $path = $this->urlManagerPath ? \Yii::getAlias($this->urlManagerPath) : __DIR__ . '/config/urlManager.php';
         if (is_file($path)) {
             $app->getUrlManager()->addRules(require($path), false);
         }
