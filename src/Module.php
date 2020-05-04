@@ -28,6 +28,37 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public $dbConnection;
 
     /**
+     * @var bool
+     */
+    public $locateControllersByPath = true;
+
+    /**
+     * @var string
+     */
+    public $webControllersPath;
+
+    /**
+     * @var string
+     */
+    public $consoleControllersPath;
+
+    /**
+     * @return string
+     */
+    public function getControllerPath()
+    {
+        if ($this->locateControllersByPath) {
+            if (\Yii::$app instanceof \yii\console\Application) {
+                return $this->consoleControllersPath;
+            } else {
+                return $this->webControllersPath;
+            }
+        } else {
+            return parent::getControllerPath();
+        }
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function init()
@@ -46,14 +77,19 @@ class Module extends \yii\base\Module implements BootstrapInterface
      */
     public function bootstrap($app)
     {
+        $localDir = dirname((new \ReflectionClass(static::class))->getFileName());
+        $this->webControllersPath = "{$localDir}/controllers";
+        $this->consoleControllersPath = "{$localDir}/commands";
+
         //Проверяем наличие зависимостей
         $this->requireModules($app, $this->requiredModules);
         // если приложение консольное - используем консольные контроллеры
         if ($app instanceof \yii\console\Application) {
             $this->controllerNamespace = $this->baseNamespace . '\\commands';
         }
+
         //подключаем urlManager
-        $path = $this->urlManagerPath ? \Yii::getAlias($this->urlManagerPath) : __DIR__ . '/config/urlManager.php';
+        $path = $this->urlManagerPath ? \Yii::getAlias($this->urlManagerPath) : "{$localDir}/config/urlManager.php";
         if (is_file($path)) {
             $app->getUrlManager()->addRules(require($path), false);
         }
