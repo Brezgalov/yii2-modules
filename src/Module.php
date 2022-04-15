@@ -19,6 +19,16 @@ class Module extends \yii\base\Module implements BootstrapInterface
     /**
      * @var string
      */
+    public $webControllersFolder = 'controllers';
+
+    /**
+     * @var string
+     */
+    public $consoleControllersFolder = 'commands';
+
+    /**
+     * @var string
+     */
     public $urlManagerPath;
 
     /**
@@ -78,8 +88,8 @@ class Module extends \yii\base\Module implements BootstrapInterface
     public function bootstrap($app)
     {
         $localDir = dirname((new \ReflectionClass(static::class))->getFileName());
-        $this->webControllersPath = "{$localDir}/controllers";
-        $this->consoleControllersPath = "{$localDir}/commands";
+        $this->webControllersPath = "{$localDir}/{$this->webControllersFolder}";
+        $this->consoleControllersPath = "{$localDir}/{$this->consoleControllersFolder}";
 
         //Проверяем наличие зависимостей
         $this->requireModules($app, $this->requiredModules);
@@ -104,7 +114,7 @@ class Module extends \yii\base\Module implements BootstrapInterface
         $idString = (@$this->id)? "модуля {$this->id} " : '';
         foreach ($names as $name) {
             if (!array_key_exists($name, $app->modules)) {
-                throw new ServerErrorHttpException("Модуль $name указан в требованиях " . $idString . "но не обнаружен в приложении!");
+                throw new ServerErrorHttpException("Модуль {$name} указан в требованиях " . $idString . " но не обнаружен в приложении!");
             }
         }
     }
